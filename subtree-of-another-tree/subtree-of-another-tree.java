@@ -13,26 +13,22 @@
  *     }
  * }
  */
-//从T1 中 找到T2 的root 然后检查子树是不是和T2完全一样
-//1.T1的左子树和T2一样 //2.T1的右子树和T2一样 //本身完全一样
+//判断一棵树是不是另一棵树的子树
+//需要判断 1. 判断 t  是不是 和 s 相等
+//        2. 判断 t 是否和树 s 的任意子树相等
 class Solution {
     public boolean isSubtree(TreeNode root, TreeNode subRoot) {
         if(subRoot == null) return true;
         if(root == null) return false;
-        
-        return identical(root, subRoot) || isSubTree(root.left, subRoot) || isSubTree(root.right, subRoot);
+        return isIdentical(root, subRoot) || isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
     }
-    public boolean identical(TreeNode root, TreeNode subRoot){
-        if(root == null && subRoot == null) return true;
-        if(root == null || subRoot == null) return false;
-        if(root.val != subRoot.val){
-            return false;
+    public boolean isIdentical(TreeNode root, TreeNode subRoot){
+        if(root == null && subRoot == null){
+            return true;
         }
-        return identical(root.left, subRoot.left) && identical (root.right, subRoot.right);
-    }
-    public boolean isSubTree(TreeNode root, TreeNode subRoot){
-        if(subRoot == null) return true;
+        if(subRoot == null) return false;
         if(root == null) return false;
-        return identical(root, subRoot) || isSubTree(root.left, subRoot) || isSubTree(root.right, subRoot);
+        if(root.val != subRoot.val) return false;
+        return isIdentical(root.left, subRoot.left) && isIdentical(root.right, subRoot.right);
     }
 }
