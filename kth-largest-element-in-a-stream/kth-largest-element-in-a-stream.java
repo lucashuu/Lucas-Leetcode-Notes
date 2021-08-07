@@ -11,12 +11,12 @@ class KthLargest {
             }
         });
         this.k = k;
-        for (int i = 0; i < nums.length && i < k; ++i) {
+        for (int i = 0; i < nums.length && i < k; i++) {
             // 将 nums 的前 k 个数（如有）入堆
             this.pq.add(nums[i]);
         }
 
-        for (int i = k; i < nums.length; ++i) {
+        for (int i = k; i < nums.length; i++) {
             // 将 nums 剩余的数（如有）依次和堆顶元素比较
             // 动态维护堆的 size 为 k
             if (nums[i] > this.pq.peek()) {
@@ -31,7 +31,7 @@ class KthLargest {
     public int add(int val) {
         if (pq.size() < k) {
             pq.offer(val);
-        } else if (pq.peek() < val) {
+        } else if (pq.peek() <= val) {
             pq.poll();
             pq.offer(val);
         }
