@@ -1,57 +1,49 @@
 class Solution {
+    int n;
+    int m;
+    int[] x = {-1, 0 , 1, 0};
+    int [] y = {0 , -1, 0 , 1};
+    //use a used array to cut left
+    //if the spot of the board has been reached no need to reach it again 
     public boolean exist(char[][] board, String word) {
-      //用dfs
-      //遍历找到开始的点
-      //递归 dfs 寻找路径 用|| 减枝
-      //创建一个二维数组记录那个方格走过
-      //用二维数组记录上下左右四个方向
-      if(board.length == 0 || board == null){
-          return false;
-      }
-      int n = board.length;
-      int m = board[0].length;
-      boolean[][] used = new boolean[n][m];
-     for(int i = 0; i < n; i++){
-        Arrays.fill(used[i], false);
+        n = board.length;
+        m = board[0].length;
+        boolean[][] used =  new boolean[n][m];
+        
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(board[i][j] == word.charAt(0)){
+                    if(dfs(board, word, i , j, 0, used)){
+                        return true;
+                    }
+                }
+            }
         }
-      // 寻找开始点
-      for(int i = 0; i < n; i++){
-          
-          for(int j = 0; j < m; j++){
-              if( dfs(board, word, 0,i, j, used)){
-                  
-                      return true;
-                  
-              }
-          }
-      }
         return false;
     }
-    public boolean dfs(char[][] board, String word, int index,int row, int col, boolean[][] used){
-        //递归结束条件 , 找到全部的word
-        if(index == word.length()){
+    public boolean dfs(char[][] board, String word, int i, int j, int pos, boolean[][] used){
+     
+        if(pos == word.length()){
+             
             return true;
+            //所有的字母都被匹配
         }
-        //如果越界, 当前字母没找到, 当前字母之前已经走过
-        if(row < 0 || col < 0 || row >= board.length || col >= board[0].length || 
-         used[row][col]  ||board[row][col] != word.charAt(index)){
-            
+        if(i < 0 || j < 0 || i >= n || j >= m || 
+         board[i][j] != word.charAt(pos) || used[i][j]){
             return false;
         }
-        //用二维数组代表方向 -1,0      0,-1     1,0      0,1
-        int[] x = {-1, 0 , 1, 0};
-        int [] y = {0 , -1, 0 , 1};
         
-        used[row][col] = true;
-        for(int i = 0; i < 4; i++){
-
-         if (dfs(board, word, index + 1, row + x[i], col + y[i], used))
-             return true;
+            //For all possiblities 
+            used[i][j] = true;
+            for(int k = 0; k < 4; k++){     
+                int xd = i + x[k];
+                int yd = j + y[k]; 
+              
+                     if(dfs(board, word, xd, yd, pos + 1, used)){
+                         return true;
+                     }
         }
-       
-       
-        used[row][col] = false;
-        
+        used[i][j] = false;
         return false;
     }
 }
