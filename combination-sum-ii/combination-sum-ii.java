@@ -1,36 +1,42 @@
 class Solution {
- 
-    List<List<Integer>> res = new ArrayList<>();
-    List<Integer> ans = new ArrayList<>();
-    //和为target的时候ans 加入res
-    //此次combination 可以有重复数据 所以 for 不自增
-    //思路基本和combination 一样
+    List<Integer> ans;
+    List<List<Integer>> res;
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
-        if(candidates.length == 0 || candidates == null){
-            return res;
-        }
-        
+        // 给的数组有重复
         Arrays.sort(candidates);
-        dfs(0, candidates, target);
+        ans = new ArrayList<>();
+        res = new ArrayList<>();
+        boolean[] used = new boolean[candidates.length];
+        dfs(candidates, target, 0, used);
         return res;
     }
-    public void dfs(int pos, int[] nums, int gap){
-        if(gap == 0){
+    public void dfs(int[] nums, int target, int Index, boolean[] used){
+        //termination case
+        if(target == 0){
+            //if the target equls to 0 add to res
             res.add(new ArrayList<>(ans));
             return;
         }
-        for(int i = pos; i < nums.length; i++){
-            int dif = gap - nums[i];
-            if(i != pos && nums[i] == nums[i - 1]){
+       
+        // for all the possibilities
+        for(int i = Index; i < nums.length; i++){
+            if(used[i] || (i > 0 && nums[i] == nums[i - 1] && !used[i - 1])){
                 continue;
             }
-            if(dif >= 0 ){
+            // memorize the state
+            // recursion 
+            int diff = target - nums[i];
+            
+            if(diff >= 0){
                 ans.add(nums[i]);
-                dfs(i + 1, nums, dif);
-                ans.remove(ans.size() -1);
+                used[i] = true;
+                dfs(nums, diff, i + 1, used); 
+                used[i] = false;
+                ans.remove(ans.size() - 1);
             }else{
                 continue;
             }
+            
         }
     }
 }
