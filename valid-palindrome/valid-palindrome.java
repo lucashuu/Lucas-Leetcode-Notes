@@ -1,29 +1,35 @@
-//双指针 一左一右
-//如果是字母再往左/右移动  Character.isLetterOrDigit
-//所有字母转换为lower case Character.toLowerCase
 class Solution {
     public boolean isPalindrome(String s) {
-        if(s == null || s.length() == 0){
+   if(s.length() == 0 || s.length() == 1){
             return true;
         }
-        int l = 0;
-        int r = s.length() - 1;
-        while (l < r){
-            if(!Character.isLetterOrDigit(s.charAt(l))){
-                l++;
-                continue;
+       
+        int left = 0;
+        int right = s.length() - 1;
+        while(left < right){
+            while(left < s.length() && !isValid(s.charAt(left))){
+                    left++;
             }
-            if(!Character.isLetterOrDigit(s.charAt(r))){
-                r--;
-                continue;
+            //if after delete all invalid char it is a empty string 
+            if(left == s.length()){
+                return true;
             }
-            if(Character.toLowerCase(s.charAt(l)) == Character.toLowerCase(s.charAt(r))){
-                l++;
-                r--;
+            while(right >= 0 && !isValid(s.charAt(right))){
+                right--;
+            }
+            if(Character.toLowerCase(s.charAt(left)) == Character.toLowerCase(s.charAt(right))){
+                left++;
+                right--;
+                // a a b a a
             }else{
-                return false;
+                break;
             }
         }
-        return true;
+        
+
+        return right <= left;
+    }
+    public boolean isValid (Character c){
+        return Character.isAlphabetic(c) || Character.isDigit(c);
     }
 }
